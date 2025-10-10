@@ -1372,10 +1372,6 @@ TermList AtomicSort::arrowSort(TermList s1, TermList s2) {
   return TermList(create2(arrow, s1, s2));
 }
 
-TermList AtomicSort::arrowSort(TermList s1, TermList s2, TermList s3) {
-  return arrowSort(s1, arrowSort(s2, s3));
-}
-
 TermList AtomicSort::arrowSort(unsigned size, const TermList* types, TermList range) {
   ASS(size > 0)
 
@@ -1384,6 +1380,14 @@ TermList AtomicSort::arrowSort(unsigned size, const TermList* types, TermList ra
     res = arrowSort(types[i], res);
 
   return res;
+}
+
+TermList AtomicSort::arrowSort(const std::initializer_list<TermList>& types) {
+  const auto size = types.size();
+  ASS(size >= 2)
+
+  const TermList* data = std::data(types);
+  return arrowSort(size - 1, data, data[size - 1]);
 }
 
 TermList AtomicSort::arrowSort(const TermStack & domSorts, TermList range) {

@@ -88,6 +88,8 @@ namespace HOL::create {
 
   TermList surroundWithLambdas(TermList t, TermStack& sorts, bool fromTop = false);
   TermList surroundWithLambdas(TermList t, TermStack& sorts, TermList sort, bool fromTop = false);
+
+  TermList placeholder(TermList sort);
 } // namespace HOL::create
 
 namespace HOL::convert {

@@ -85,8 +85,9 @@ set(UNIT_TESTS
     UnitTests/tTimeTrace.cpp
     UnitTests/tUnificationWithAbstraction.cpp
     UnitTests/HOL/tHOL_Printing.cpp
-    UnitTests/HOL/tBetaReduction.cpp
-    UnitTests/HOL/tEtaReduction.cpp
+    UnitTests/HOL/tHOL_BetaReduction.cpp
+    UnitTests/HOL/tHOL_EtaReduction.cpp
+    UnitTests/HOL/tHOL_Unification.cpp
 )
 
 ################################################################
@@ -466,6 +467,8 @@ set(SOURCES
     Kernel/HOL/EtaNormaliser.hpp
     Kernel/HOL/SubtermReplacer.cpp
     Kernel/HOL/SubtermReplacer.hpp
+    Kernel/HOL/ToPlaceholders.cpp
+    Kernel/HOL/ToPlaceholders.hpp
     Lib/Allocator.cpp
     Lib/Allocator.hpp
     Lib/Array.hpp

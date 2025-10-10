@@ -50,7 +50,7 @@ public:
   static Defs* instance();
 
   TermList srt, fSrt;
-  TypedTermList a, f, f2, f3, g;
+  TypedTermList a, f, f2, f3, g, h;
 };
 
 TypedTermList x(unsigned idx, std::optional<TermList> sort = std::nullopt);

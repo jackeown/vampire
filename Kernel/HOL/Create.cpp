@@ -119,3 +119,7 @@ TermList HOL::create::surroundWithLambdas(TermList t, TermStack& sorts, TermList
   }
   return t;
 }
+
+TermList HOL::create::placeholder(TermList sort) {
+  return TermList(Term::create1(env.signature->getPlaceholder(), sort));
+}
