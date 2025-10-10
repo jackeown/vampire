@@ -32,15 +32,18 @@ TermList ToPlaceholders::replace(TermList term) {
 }
 
 TermList ToPlaceholders::transformSubterm(TermList t) {
-  if (_nextIsPrefix || t.isVar())
+  if (_nextIsPrefix || t.isVar()) {
+    std::cout << "transSub " << t << " ~> " << t << std::endl;
     return t;
+  }
 
   // Not expecting any unreduced redexes here
   ASS(!t.head().isLambdaTerm())
 
-  auto sort = SortHelper::getResultSort(t.term());
-  if (t.isLambdaTerm() || t.head().isVar())
+  const auto sort = t.resultSort();
+  if (t.isLambdaTerm() || t.head().isVar()) {
     return HOL::create::placeholder(sort);
+  }
 
   if (_mode == Options::FunctionExtensionality::ABSTRACTION) {
     if (sort.isArrowSort() || sort.isVar() || (sort.isBoolSort() && !_topLevel)) {

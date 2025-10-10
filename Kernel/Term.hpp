@@ -277,10 +277,10 @@ public:
   /** if not var, the inner term must be shared */
   unsigned weight() const;
   /** returns true if this termList is wrapping a higher-order "arrow" sort */
-  bool isArrowSort();
-  bool isBoolSort();
-  bool isArraySort();
-  bool isTupleSort();
+  bool isArrowSort() const;
+  bool isBoolSort() const;
+  bool isArraySort() const;
+  bool isTupleSort() const;
   bool containsSubterm(TermList v) const;
   bool containsAllVariablesOf(TermList t) const;
   bool ground() const;
@@ -298,9 +298,10 @@ public:
   TermList rhs() const;
   TermList lambdaBody() const;
   TermList head() const;
-  std::pair<TermList, TermList> asPair();
-  TermList domain();
-  TermList result();
+  std::pair<TermList, TermList> asPair() const;
+  TermList domain() const;
+  TermList result() const;
+  TermList resultSort() const;
   /* End higher-order terms */
 
 #if VDEBUG
@@ -805,6 +806,7 @@ public:
   /** True if the term is, in fact, a sort */
   bool isSort() const { return _args[0]._sort(); }
   bool isArrowSort() const;
+  TermList resultSort() const;
   TermKind kind() const { return isSort() ? TermKind::SORT 
                                : isLiteral() ? TermKind::LITERAL
                                : TermKind::TERM; }

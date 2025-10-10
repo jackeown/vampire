@@ -13,6 +13,7 @@
 
 #include "Kernel/HOL/HOL.hpp"
 
+#include "ToPlaceholders.hpp"
 #include "Kernel/Formula.hpp"
 
 using IndexVarStack = Stack<std::pair<unsigned, unsigned>>;
@@ -297,8 +298,7 @@ unsigned HOL::getArity(TermList sort) {
 }
 
 TermList HOL::getDeBruijnIndex(int index, TermList sort) {
-  unsigned fun = env.signature->getDeBruijnIndex(index);
-  return TermList(Term::create1(fun, sort));
+  return TermList(Term::create1(env.signature->getDeBruijnIndex(index), sort));
 }
 
 void HOL::getHeadSortAndArgs(TermList term, TermList& head, TermList& headSort, TermStack& args) {
@@ -354,4 +354,8 @@ void HOL::getMatrixAndPrefSorts(TermList t, TermList& matrix, TermStack& sorts) 
     t = t.lambdaBody();
   }
   matrix = t;
+}
+
+TermList HOL::toPlaceholders(TermList term) {
+  return ToPlaceholders().replace(term);
 }

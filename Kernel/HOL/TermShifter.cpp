@@ -29,9 +29,8 @@ TermList TermShifter::transformSubterm(TermList t) {
     if (index >= _cutOff) {
       // free index. lift
       if (_shiftBy != 0) {
-        TermList sort = SortHelper::getResultSort(t.term());
         ASS(_shiftBy >= 0 || index >= std::abs(_shiftBy));
-        return HOL::getDeBruijnIndex(static_cast<int>(index) + _shiftBy, sort);
+        return HOL::getDeBruijnIndex(static_cast<int>(index) + _shiftBy, t.resultSort());
       }
       auto j = index - _cutOff;
       if (j < _minFreeIndex || _minFreeIndex == -1)

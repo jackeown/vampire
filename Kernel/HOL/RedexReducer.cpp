@@ -32,7 +32,7 @@ TermList RedexReducer::reduce(TermList head, TermStack& args) {
 
 TermList RedexReducer::transformSubterm(TermList t) {
   if (t.deBruijnIndex().isSome()) {
-    unsigned index = t.deBruijnIndex().unwrap();
+    const unsigned index = t.deBruijnIndex().unwrap();
     if (index == _replace) {
       // any free indices in _t2 need to be lifted by the number of extra lambdas
       // that now surround them
@@ -40,8 +40,7 @@ TermList RedexReducer::transformSubterm(TermList t) {
     }
     if (index > _replace) {
       // free index. replace by index 1 less as now surrounded by one fewer lambdas
-      TermList sort = SortHelper::getResultSort(t.term());
-      return HOL::getDeBruijnIndex(index - 1, sort);
+      return HOL::getDeBruijnIndex(index - 1, t.resultSort());
     }
   }
 

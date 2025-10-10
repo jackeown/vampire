@@ -32,8 +32,10 @@ public:
   TermList transformSubterm(TermList t) override;
 
   void onTermEntry(Term* t) override {
-    if (t->isApplication())
+    if (t->isApplication()) {
       _nextIsPrefix = true;
+      // std::cout << "nextIsPref" << std::endl;
+    }
   }
 
   void onTermExit(Term* t) override {

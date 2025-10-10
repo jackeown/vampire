@@ -26,7 +26,7 @@ public:
         _by(by),
         _liftFreeIndices(liftFree),
         _shiftBy(0) {
-    ASS(what.isVar() || by.isVar() || SortHelper::getResultSort(what.term()) == SortHelper::getResultSort(by.term()));
+    ASS(what.isVar() || by.isVar() || what.resultSort() == by.resultSort());
     dontTransformSorts();
   }
 

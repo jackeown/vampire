@@ -24,7 +24,7 @@ TermList HOL::create::app(TermList sort, TermList head, TermList arg) {
 TermList HOL::create::app(TermList head, TermList arg) {
   ASS(head.isTerm())
 
-  return app(SortHelper::getResultSort(head.term()), head, arg);
+  return app(head.resultSort(), head, arg);
 }
 
 TermList HOL::create::app(TermList s1, TermList s2, TermList arg1, TermList arg2, bool shared) {
@@ -42,7 +42,7 @@ TermList HOL::create::app(TermList s1, TermList s2, TermList arg1, TermList arg2
 }
 
 TermList HOL::create::app(TermList sort, TermList head, const TermStack& terms) {
-  ASS(head.isVar() || SortHelper::getResultSort(head.term()) == sort)
+  ASS(head.isVar() || head.resultSort() == sort)
 
   TermList res = head;
 
@@ -54,6 +54,36 @@ TermList HOL::create::app(TermList sort, TermList head, const TermStack& terms) 
   }
 
   return res;
+}
+
+TermList HOL::create::equality(TermList sort) {
+  static const auto eqProxy = env.signature->getEqualityProxy();
+
+  return TermList(Term::create1(eqProxy, sort));
+}
+
+TermList HOL::create::neg() {
+  static const auto term = TermList(Term::createConstant(env.signature->getNotProxy()));
+
+  return term;
+}
+
+TermList HOL::create::pi(TermList sort) {
+  static const auto piProxy = env.signature->getPiSigmaProxy("vPI");
+
+  return TermList(Term::create1(piProxy, sort));
+}
+
+TermList HOL::create::sigma(TermList sort) {
+  static const auto sigmaProxy = env.signature->getPiSigmaProxy("vSIGMA");
+
+  return TermList(Term::create1(sigmaProxy, sort));
+}
+
+TermList HOL::create::placeholder(TermList sort) {
+  static const auto placeholder = env.signature->getPlaceholder();
+
+  return TermList(Term::create1(placeholder, sort));
 }
 
 Term* HOL::create::lambda(unsigned numArgs, const unsigned* vars, const TermList* varSorts, TypedTermList body, TermList* resultExprSort) {
@@ -92,15 +122,13 @@ TermList HOL::create::namelessLambda(TermList varSort, TermList termSort, TermLi
 TermList HOL::create::namelessLambda(TermList varSort, TermList term) {
   ASS(term.isTerm())
 
-  TermList termSort = SortHelper::getResultSort(term.term());
-  return namelessLambda(varSort, termSort, term);
+  return namelessLambda(varSort, term.resultSort(), term);
 }
 
 TermList HOL::create::surroundWithLambdas(TermList t, TermStack& sorts, bool fromTop) {
   ASS(t.isTerm())
 
-  TermList sort = SortHelper::getResultSort(t.term());
-  return surroundWithLambdas(t, sorts, sort, fromTop);
+  return surroundWithLambdas(t, sorts, t.resultSort(), fromTop);
 }
 
 TermList HOL::create::surroundWithLambdas(TermList t, TermStack& sorts, TermList sort, bool fromTop) {
@@ -120,6 +148,3 @@ TermList HOL::create::surroundWithLambdas(TermList t, TermStack& sorts, TermList
   return t;
 }
 
-TermList HOL::create::placeholder(TermList sort) {
-  return TermList(Term::create1(env.signature->getPlaceholder(), sort));
-}

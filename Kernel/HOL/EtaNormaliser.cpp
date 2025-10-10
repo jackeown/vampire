@@ -29,7 +29,7 @@ TermList EtaNormaliser::normalise(TermList t) {
     if (matrix.isVar())
       return t; // ^^^^^^X can't eta reduce this
 
-    TermList matrixSort = SortHelper::getResultSort(matrix.term());
+    TermList matrixSort = matrix.resultSort();
     TermList reduced = normalise(matrix);
 
     if (reduced != matrix)

@@ -181,22 +181,26 @@ TermList TermList::head() const {
   return trm;
 }
 
-std::pair<TermList, TermList> TermList::asPair() {
+std::pair<TermList, TermList> TermList::asPair() const {
   ASS(isArrowSort())
 
   return {domain(), result()};
 }
 
-TermList TermList::domain() {
+TermList TermList::domain() const {
   ASS(isArrowSort())
 
   return *term()->nthArgument(0);
 }
 
-TermList TermList::result() {
+TermList TermList::result() const {
   ASS(isArrowSort())
 
   return *term()->nthArgument(1);
+}
+
+TermList TermList::resultSort() const {
+  return term()->resultSort();
 }
 
 /**
@@ -301,28 +305,28 @@ unsigned TermList::weight() const
   return isVar() ? 1 : term()->weight();
 }
 
-bool TermList::isArrowSort()
+bool TermList::isArrowSort() const
 {
   return !isVar() && term()->isSort() &&
-         static_cast<AtomicSort*>(term())->isArrowSort();
+         static_cast<const AtomicSort*>(term())->isArrowSort();
 }
 
-bool TermList::isBoolSort()
+bool TermList::isBoolSort() const
 {
   return !isVar() && term()->isSort() &&
-         static_cast<AtomicSort*>(term())->isBoolSort();
+         static_cast<const AtomicSort*>(term())->isBoolSort();
 }
 
-bool TermList::isArraySort()
+bool TermList::isArraySort() const
 {
   return !isVar() && term()->isSort() &&
-         static_cast<AtomicSort*>(term())->isArraySort();
+         static_cast<const AtomicSort*>(term())->isArraySort();
 }
 
-bool TermList::isTupleSort()
+bool TermList::isTupleSort() const
 {
   return !isVar() && term()->isSort() &&
-         static_cast<AtomicSort*>(term())->isTupleSort();
+         static_cast<const AtomicSort*>(term())->isTupleSort();
 }
 
 bool AtomicSort::isArrowSort() const {
@@ -928,6 +932,10 @@ const std::string& Term::functionName() const
 
 bool Term::isArrowSort() const {
   return isSort() && env.signature->isArrowCon(_functor);
+}
+
+TermList Term::resultSort() const {
+  return SortHelper::getResultSort(this);
 }
 
 bool Term::isApplication() const {
