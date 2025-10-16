@@ -292,6 +292,7 @@ public:
   bool isRedex() const;
   bool isProxy(Proxy proxy) const;
   bool isChoice() const;
+  bool isPlaceholder() const;
 
   Option<unsigned> deBruijnIndex() const;
   TermList lhs() const;
@@ -818,6 +819,7 @@ public:
   bool isRedex() const;
   bool isProxy(Proxy proxy) const;
   bool isChoice() const;
+  bool isPlaceholder() const;
 
   TermList lambdaBody() const {
     ASS(isLambdaTerm())
