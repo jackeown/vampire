@@ -24,11 +24,9 @@ using namespace Kernel;
 // An innermost strategy is theoretically more efficient
 // but is difficult to write iteratively TODO
 class BetaNormaliser : public TermTransformer {
-  unsigned reductions;
+  unsigned reductions = 0;
 public:
-  BetaNormaliser() : reductions(0) {
-    dontTransformSorts();
-  }
+  BetaNormaliser() : TermTransformer(false) {}
 
   unsigned getReductions() const {
     return reductions;

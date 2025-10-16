@@ -14,27 +14,27 @@
 #include "Kernel/HOL/TermShifter.hpp"
 #include "Kernel/HOL/HOL.hpp"
 
-TermList TermShifter::shift(TermList term, int shiftBy) {
-  _cutOff = 0;
-  _shiftBy = shiftBy;
+std::pair<TermList, Option<unsigned>> TermShifter::shift(TermList term, int shiftBy) {
+  TermShifter ts = TermShifter(shiftBy);
 
-  TermList transformed = transformSubterm(term);
-  return (transformed != term) ? transformed
-                               : transform(term);
+  const TermList transformed = ts.transformSubterm(term);
+  const TermList result = transformed == term ? ts.transform(term)
+                                              : transformed;
+  return {result, ts._minFreeIndex};
 }
 
 TermList TermShifter::transformSubterm(TermList t) {
   if (t.deBruijnIndex().isSome()) {
     unsigned index = t.deBruijnIndex().unwrap();
     if (index >= _cutOff) {
+      auto j = index - _cutOff;
+      _minFreeIndex = Option<unsigned>(std::min(_minFreeIndex.unwrapOr(j), j));
+
       // free index. lift
       if (_shiftBy != 0) {
         ASS(_shiftBy >= 0 || index >= std::abs(_shiftBy));
         return HOL::getDeBruijnIndex(static_cast<int>(index) + _shiftBy, t.resultSort());
       }
-      auto j = index - _cutOff;
-      if (j < _minFreeIndex || _minFreeIndex == -1)
-        _minFreeIndex = static_cast<int>(j);
     }
   }
   return t;

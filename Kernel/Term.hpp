@@ -302,6 +302,7 @@ public:
   TermList domain() const;
   TermList result() const;
   TermList resultSort() const;
+  TermList replaceSubterm(TermList what, TermList by, bool liftFreeIndices = false) const;
   /* End higher-order terms */
 
 #if VDEBUG
@@ -806,7 +807,6 @@ public:
   /** True if the term is, in fact, a sort */
   bool isSort() const { return _args[0]._sort(); }
   bool isArrowSort() const;
-  TermList resultSort() const;
   TermKind kind() const { return isSort() ? TermKind::SORT 
                                : isLiteral() ? TermKind::LITERAL
                                : TermKind::TERM; }
@@ -1083,8 +1083,8 @@ public:
   
   static TermList arrowSort(const TermStack& domSorts, TermList range);
   static TermList arrowSort(TermList s1, TermList s2);
+  static TermList arrowSort(TermList s1, TermList s2, TermList s3);
   static TermList arrowSort(unsigned size, const TermList* types, TermList range);
-  static TermList arrowSort(const std::initializer_list<TermList>& types);
   static TermList arraySort(TermList indexSort, TermList innerSort);
   static TermList tupleSort(unsigned arity, TermList* sorts);
   static TermList defaultSort();
